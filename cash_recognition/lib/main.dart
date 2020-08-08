@@ -70,57 +70,160 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Take a picture')),
-      // Wait until the controller is initialized before displaying the
-      // camera preview. Use a FutureBuilder to display a loading spinner
-      // until the controller has finished initializing.
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
-          } else {
-            // Otherwise, display a loading indicator.
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+    return GestureDetector(
+      onTap: () async {
+        // Take the Picture in a try / catch block. If anything goes wrong,
+        // catch the error.
+        try {
+          // Ensure that the camera is initialized.
+          await _initializeControllerFuture;
+
+          // Construct the path where the image should be saved using the
+          // pattern package.
+          final path = join(
+            // Store the picture in the temp directory.
+            // Find the temp directory using the `path_provider` plugin.
+            (await getTemporaryDirectory()).path,
+            '${DateTime.now()}.png',
+          );
+
+          print("Image Path IMAGE PATH IMAGE PATH  : " + path.toString());
+
+          // Attempt to take a picture and log where it's been saved.
+          await _controller.takePicture(path);
+
+          // If the picture was taken, display it on a new screen.
+          //  SnackBar(content: 'Image')
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DisplayPictureScreen(imagePath: path),
+            ),
+          );
+        } catch (e) {
+          // If an error occurs, log the error to the console.
+          print(e);
+        }
+      },
+      child: Stack(
+        children: <Widget>[
+          Scaffold(
+            // appBar: AppBar(title: Text('Take a picture')),
+            // Wait until the controller is initialized before displaying the
+            // camera preview. Use a FutureBuilder to display a loading spinner
+            // until the controller has finished initializing.
+            body: FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // If the Future is complete, display the preview.
+                  return CameraPreview(_controller);
+                } else {
+                  // Otherwise, display a loading indicator.
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+            // floatingActionButton: FloatingActionButton(
+            //   child: Icon(Icons.camera_alt),
+            //   // Provide an onPressed callback.
+            //   onPressed: () async {
+            //     // Take the Picture in a try / catch block. If anything goes wrong,
+            //     // catch the error.
+            //     try {
+            //       // Ensure that the camera is initialized.
+            //       await _initializeControllerFuture;
+
+            //       // Construct the path where the image should be saved using the
+            //       // pattern package.
+            //       final path = join(
+            //         // Store the picture in the temp directory.
+            //         // Find the temp directory using the `path_provider` plugin.
+            //         (await getTemporaryDirectory()).path,
+            //         '${DateTime.now()}.png',
+            //       );
+
+            //       print(
+            //           "Image Path IMAGE PATH IMAGE PATH  : " + path.toString());
+
+            //       // Attempt to take a picture and log where it's been saved.
+            //       await _controller.takePicture(path);
+
+            //       // If the picture was taken, display it on a new screen.
+            //       //  SnackBar(content: 'Image')
+
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) =>
+            //               DisplayPictureScreen(imagePath: path),
+            //         ),
+            //       );
+            //     } catch (e) {
+            //       // If an error occurs, log the error to the console.
+            //       print(e);
+            //     }
+            //   },
+            // ),
+          ),
+          // _buildTopHeader(),
+          _buildInfoBar(),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.camera_alt),
-        // Provide an onPressed callback.
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
+    );
+  }
 
-            // Construct the path where the image should be saved using the
-            // pattern package.
-            final path = join(
-              // Store the picture in the temp directory.
-              // Find the temp directory using the `path_provider` plugin.
-              (await getTemporaryDirectory()).path,
-              '${DateTime.now()}.png',
-            );
-
-            // Attempt to take a picture and log where it's been saved.
-            await _controller.takePicture(path);
-
-            // If the picture was taken, display it on a new screen.
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
+  Widget _buildInfoBar() {
+    return Positioned(
+      bottom: 0.0,
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Material(
+              color: Colors.white,
+              elevation: 14.0,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(35.0),
+                topRight: Radius.circular(35.0),
               ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
+              shadowColor: Color(0x802196F3),
+              child: _buildInitContent(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInitContent() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 60.0,
+        child: Column(
+          children: <Widget>[
+            _titleContainer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _titleContainer() {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Click to take Picture of Cash",
+            style: TextStyle(fontSize: 20.0, color: Colors.cyan),
+          ),
+        ],
       ),
     );
   }
