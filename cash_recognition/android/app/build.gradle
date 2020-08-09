@@ -32,6 +32,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    aaptOptions {
+        //for tensorflow lite
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
     lintOptions {
         disable 'InvalidPackage'
     }
