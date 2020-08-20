@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "29031344321",
+    "firebase_url": "https://dami-p2.firebaseio.com",
+    "project_id": "dami-p2",
+    "storage_bucket": "dami-p2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29031344321:android:9f1c05f247569cdf768c40",
+        "android_client_info": {
+          "package_name": "com.example.dami_p2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29031344321-ok94ql4r43dj15dthghnmggq8rtsiqta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb-E_ZFPAVwQwNJdVCInRg-YqOQi1vLYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29031344321-ok94ql4r43dj15dthghnmggq8rtsiqta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
