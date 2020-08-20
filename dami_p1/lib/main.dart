@@ -38,7 +38,6 @@ class _FirestoreSlideshowState extends State<FirestoreSlideshow> {
 // Set state when page changes
     ctrl.addListener(() {
       int next = ctrl.page.round();
-
       if (currentPage != next) {
         setState(() {
           currentPage = next;
