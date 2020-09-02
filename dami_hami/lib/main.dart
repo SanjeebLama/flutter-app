@@ -1,117 +1,217 @@
+import 'custom_drawer_guitar.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'custom_drawer.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MaterialApp(
+      home: MyApp(),
+      debugShowCheckedModeBanner: false,
+    ));
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    bool flip = false;
+    AppBar appBar = flip
+        ? AppBar()
+        : AppBar(
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => CustomDrawer.of(context).open(),
+                );
+              },
+            ),
+            title: Text(
+              'Dami Hami',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+    Widget child = MyHomePage(appBar: appBar);
+    if (flip) {
+      child = CustomGuitarDrawer(child: child);
+    } else {
+      child = CustomDrawer(child: child);
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        primarySwatch: Colors.amber,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: child,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  final AppBar appBar;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  MyHomePage({Key key, @required this.appBar}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  CarouselSlider carouselSlider;
+  int _current = 0;
+  List imgList = [
+    'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1554321586-92083ba0a115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1536679545597-c2e5e1946495?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1543922596-b3bbaba80649?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+  ];
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      appBar: widget.appBar,
+      body: Container(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            carouselSlider = CarouselSlider(
+              height: 400.0,
+              initialPage: 0,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              reverse: false,
+              enableInfiniteScroll: true,
+              autoPlayInterval: Duration(seconds: 6),
+              autoPlayAnimationDuration: Duration(milliseconds: 2000),
+              pauseAutoPlayOnTouch: Duration(seconds: 10),
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index) {
+                setState(() {
+                  _current = index;
+                });
+              },
+              items: imgList.map((imgUrl) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SecondScreen(),
+                              ));
+                        },
+                        child: Image.network(
+                          imgUrl,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            SizedBox(
+              height: 20,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: map<Widget>(imgList, (index, url) {
+                return Container(
+                  width: 10.0,
+                  height: 10.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _current == index ? Colors.yellow : Colors.grey[300],
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[
+            //     OutlineButton(
+            //       onPressed: goToPrevious,
+            //       child: Text("<"),
+            //     ),
+            //     OutlineButton(
+            //       onPressed: goToNext,
+            //       child: Text(">"),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  // goToPrevious() {
+  //   carouselSlider.previousPage(
+  //       duration: Duration(milliseconds: 300), curve: Curves.ease);
+  // }
+
+  // goToNext() {
+  //   carouselSlider.nextPage(
+  //       duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+  // }
+}
+
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: PageView(
+            children: <Widget>[
+              Container(
+                child: RaisedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Go back!'),
+                ),
+                color: Colors.pink,
+              ),
+              Container(
+                child: Image.network(
+                  'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+                  fit: BoxFit.fitHeight,
+                ),
+                color: Colors.cyan,
+              ),
+              Container(
+                color: Colors.deepPurple,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
+// child: RaisedButton(
+//             onPressed: () {
+//               Navigator.pop(context);
+//             },
+//             child: Text('Go back!'),
