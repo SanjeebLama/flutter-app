@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "443616515712",
+    "firebase_url": "https://flutterfire-crud.firebaseio.com",
+    "project_id": "flutterfire-crud",
+    "storage_bucket": "flutterfire-crud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443616515712:android:abfece37601e979f657865",
+        "android_client_info": {
+          "package_name": "com.willpower.flutterfire_crud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443616515712-2g9st8gculdlraolta40176b7p51dc89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8DPuufFoTLPMxuixRJzQrNLZ0elCjPhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443616515712-2g9st8gculdlraolta40176b7p51dc89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
