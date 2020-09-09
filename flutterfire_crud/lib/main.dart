@@ -140,6 +140,69 @@ class UserInformation extends StatelessWidget {
   }
 }
 
+// class DetailList extends StatefulWidget {
+//   final DocumentSnapshot users;
+
+//   DetailList({Key key, @required this.users}) : super(key: key);
+//   @override
+//   _DetailListState createState() => _DetailListState();
+// }
+
+// class _DetailListState extends State<DetailList> {
+//   // int _count() {
+//   //   List<String> tags = widget.users.data["tags"];
+//   //   int count = tags.length;
+//   //   return count;
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("${widget.users.data['name']}"),
+//       ),
+//       body: ListView(
+//         children: [
+//           Column(children: [
+//             Container(
+//               height: MediaQuery.of(context).size.height / 3.0,
+//               width: MediaQuery.of(context).size.width,
+//               child: Center(
+//                 child: Image.network(widget.users.data["img"]),
+//               ),
+//             ),
+//             Container(
+//               child: Card(
+//                 child: ListTile(
+//                   title: Text(widget.users.data["name"]),
+//                   subtitle: Text("Age:" + widget.users.data["job"]),
+//                 ),
+//               ),
+//             ),
+//             Container(
+//                 height: 500.0, child: ArrayView(widget.users.data["skills"])),
+//           ]),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class ArrayView extends StatelessWidget {
+//   final List skills;
+//   ArrayView(this.skills);
+//   @override
+//   Widget build(BuildContext context) {
+//     List<Widget> children = new List<Widget>();
+//     skills.forEach((element) {
+//       children.add(Text(element));
+//     });
+//     return ListView(
+//       children: children,
+//     );
+//   }
+// }
+
 class DetailList extends StatefulWidget {
   final DocumentSnapshot users;
 
@@ -161,29 +224,7 @@ class _DetailListState extends State<DetailList> {
       appBar: AppBar(
         title: Text("${widget.users.data['name']}"),
       ),
-      body: ListView(
-        children: [
-          Column(children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 3.0,
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Image.network(widget.users.data["img"]),
-              ),
-            ),
-            Container(
-              child: Card(
-                child: ListTile(
-                  title: Text(widget.users.data["name"]),
-                  subtitle: Text("Age:" + widget.users.data["job"]),
-                ),
-              ),
-            ),
-            Container(
-                height: 500.0, child: ArrayView(widget.users.data["skills"])),
-          ]),
-        ],
-      ),
+      body: ArrayView(widget.users.data["skills"]),
     );
   }
 }
@@ -195,9 +236,13 @@ class ArrayView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = new List<Widget>();
     skills.forEach((element) {
-      children.add(Text(element));
+      children.add(new Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Image.network(element),
+      ));
     });
-    return ListView(
+    return PageView(
       children: children,
     );
   }
