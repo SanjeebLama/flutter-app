@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:vector_math/vector_math_64.dart' show Vector3;
+import 'loader.dart';
 
 class DetailPage extends StatefulWidget {
   final List img;
@@ -27,7 +28,9 @@ class _DetailPageState extends State<DetailPage> {
               loadingBuilder: (context, child, loadingProgress) {
                 return loadingProgress == null
                     ? child
-                    : LinearProgressIndicator();
+                    : Center(
+                        child: ColorLoader(),
+                      );
               },
             ),
           ),
