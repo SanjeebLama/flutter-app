@@ -37,26 +37,28 @@ class _FirestoreSlideshowState extends State<FirestoreSlideshow> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: slides,
-        initialData: [],
-        builder: (context, AsyncSnapshot snap) {
-          List slideList = snap.data.toList();
+    return Scaffold(
+      body: StreamBuilder(
+          stream: slides,
+          initialData: [],
+          builder: (context, AsyncSnapshot snap) {
+            List slideList = snap.data.toList();
 
-          return PageView.builder(
-              controller: ctrl,
-              itemCount: slideList.length + 1,
-              // ignore: missing_return
-              itemBuilder: (context, int currentIdx) {
-                if (currentIdx == 0) {
-                  return _buildTagPage();
-                } else if (slideList.length >= currentIdx) {
-                  // Active page
-                  bool active = currentIdx == currentPage;
-                  return _buildStoryPage(slideList[currentIdx - 1], active);
-                }
-              });
-        });
+            return PageView.builder(
+                controller: ctrl,
+                itemCount: slideList.length + 1,
+                // ignore: missing_return
+                itemBuilder: (context, int currentIdx) {
+                  if (currentIdx == 0) {
+                    return _buildTagPage();
+                  } else if (slideList.length >= currentIdx) {
+                    // Active page
+                    bool active = currentIdx == currentPage;
+                    return _buildStoryPage(slideList[currentIdx - 1], active);
+                  }
+                });
+          }),
+    );
   }
 
   void _queryDb({String tag = 'DamiUpdate'}) {
@@ -94,7 +96,9 @@ class _FirestoreSlideshowState extends State<FirestoreSlideshow> {
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(data['cover']),
+                image: NetworkImage(
+                  data['cover'],
+                ),
               ),
               boxShadow: [
                 BoxShadow(
